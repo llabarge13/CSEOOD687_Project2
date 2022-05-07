@@ -8,6 +8,7 @@
 #include <vector>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <ireduce.h>
 #pragma once
 
 // Performs reduce operation on intermediate results.
@@ -26,17 +27,11 @@
 //		for (auto const& pair : map_data) {
 //		    success = reducer->reduce(pair.first, pair.second);
 //		}
-class Reduce
+class Reduce : public IReduce<std::string, int>
 {
 
 public:
 	Reduce(const boost::filesystem::path& directory);
-
-	// Reduce object must be deleted or go out of scope
-	// and be destroyed on the stack, otherwise the output
-	// file will not be able to be read until the Reduce object
-	// class relinquishes it .
-	~Reduce();
 
 	// Performs reduce operation on intermediate results.
 	// Given sorted data from the intermediate file, reduces the results 
@@ -45,20 +40,4 @@ public:
 	// If reduce operation fails (cannot write to file), returns -1. 
 	// If reduce operation succeeds, returns 0.
 	int reduce(const std::string& key, const std::vector<int>& values);
-
-	// Gets the path of the output file
-	boost::filesystem::path getOutputPath();
-
-	// Gets the path of the output directory
-	boost::filesystem::path getOutputDirectory();
-
-private:
-	boost::filesystem::path output_directory_;
-	boost::filesystem::path output_path_;
-	boost::filesystem::ofstream* output_stream_;
-
-	// Exports word, value pair to disk
-	// If the export fails, returns -1. 
-	// If the export succeeds, returns 0.
-	int exportToDisk(const std::string& key, int value);
 };

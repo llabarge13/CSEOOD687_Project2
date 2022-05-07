@@ -59,6 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interfaces\Interfaces.vcxproj">
+      <Project>{aa259646-b2fe-46d5-b7a5-9066031ef3e5}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\MapReduce\MapReduce.vcxproj">
       <Project>{c037fab0-659b-43e1-abab-2e88cb49058b}</Project>
     </ProjectReference>

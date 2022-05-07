@@ -7,9 +7,9 @@
 // Workflow class definition
 #pragma once
 #include "boost\filesystem.hpp"
-#include "map.h"
+#include "imap.h"
 #include "sorting.h"
-#include "reduce.h"
+#include "ireduce.h"
 
 class Workflow
 {
@@ -31,8 +31,8 @@ class Workflow
 		boost::filesystem::path intermediate_dir_;
 		boost::filesystem::path out_dir_;
 
-		Map* map_;																				// Map is aggregated by Workflow
+		IMap<std::string, std::string> * map_;													// Map is aggregated by Workflow
 		Sorting* sorter_;																		// Sorting is aggregated by Workflow
-		Reduce* reduce_;																		// Reduce is aggregated by Workflow
+		IReduce<std::string, int>* reduce_;														// Reduce is aggregated by Workflow
 };
 

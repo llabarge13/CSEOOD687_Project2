@@ -8,7 +8,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BoostRoot)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BoostRoot);..\Interfaces</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(BoostLib);$(SolutionDir)\MapReduce\$(IntDir)</AdditionalLibraryDirectories>
