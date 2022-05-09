@@ -27,7 +27,7 @@ TEST(mapTest, checkOutputPath) {
     std::string text = "The quick brown fox jumps over the lazy dog.";
     std::string file = "test.txt";
 
-    Map* m = new Map(directory);
+    Map* m = createMapper(directory);
     int success = m->map(file, text);
     EXPECT_EQ(success, 0);
 
@@ -47,7 +47,7 @@ TEST(mapTest, checkMapResult) {
     // Run map
     std::string text = "The quick brown fox jumps over the lazy dog.";
     std::string file = "test.txt";
-    Map* m = new Map(directory);
+    Map* m = createMapper(directory);
     int success = m->map(file, text);
     EXPECT_EQ(success, 0);
 
@@ -83,7 +83,7 @@ TEST(mapTest, badOutputDirectory) {
     // Run map
     std::string text = "The quick brown fox jumps over the lazy dog.";
     std::string file = "test.txt";
-    Map* m = new Map(directory);
+    Map* m = createMapper(directory);
     int success = m->map(file, text);
 
     EXPECT_EQ(success, -1);
@@ -146,7 +146,7 @@ TEST(sortTest, badInputFileFormat) {
 // Verify reducer returns correct directory
 TEST(reduceTest, checkOutputDirectory) {
     boost::filesystem::path output_directory = boost::filesystem::path{ ".\\temp" };
-    Reduce* reducer = new Reduce(output_directory);
+    Reduce* reducer = createReducer(output_directory);
     EXPECT_EQ(output_directory.compare(reducer->getOutputDirectory()), 0);
     delete reducer;
 }
@@ -155,7 +155,7 @@ TEST(reduceTest, checkOutputDirectory) {
 TEST(reduceTest, checkOutputPath) {
     boost::filesystem::path output_directory = boost::filesystem::path{ ".\\temp" };
     boost::filesystem::path output_path = boost::filesystem::path{ ".\\temp\\reduce.txt" };
-    Reduce* reducer = new Reduce(output_directory);
+    Reduce* reducer = createReducer(output_directory);
     EXPECT_EQ(output_path.compare(reducer->getOutputPath()), 0);
     delete reducer;
 }
@@ -163,7 +163,7 @@ TEST(reduceTest, checkOutputPath) {
 // Verify reduce fails when cannot write to disk
 TEST(reduceTest, checkBadDirectory) {
     // Non-existent directory
-    boost::filesystem::path ouput_directory = boost::filesystem::path{ ".\\tem" };
+    boost::filesystem::path output_directory = boost::filesystem::path{ ".\\tem" };
 
     // Example output of sort
     boost::container::map<std::string, std::vector<int>> map_data;
@@ -181,7 +181,7 @@ TEST(reduceTest, checkBadDirectory) {
 
     int success;
     // Run reduce
-    Reduce* reducer = new Reduce(ouput_directory);
+    Reduce* reducer = createReducer(output_directory);
     for (auto const& pair : map_data) {
         success = reducer->reduce(pair.first, pair.second);
         EXPECT_EQ(success, -1); // Check reduce fails
@@ -209,7 +209,7 @@ TEST(reduceTest, checkReduceOutput) {
 
     int success;
     // Run reduce
-    Reduce* reducer = new Reduce(output_directory);
+    Reduce* reducer = createReducer(output_directory);
     for (auto const& pair : map_data) {
         success = reducer->reduce(pair.first, pair.second);
         EXPECT_EQ(success, 0);
@@ -245,8 +245,11 @@ TEST(WorkflowTest, testConstructor)
     std::string tar_dir = ".\\shakespeare";
     std::string inter_dir = ".\\temp2";
     std::string out_dir = ".\\output";
+    std::string map_dll = ".\\dlls\\MapLibrary.dll";
+    std::string reduce_dll = ".\\dlls\\ReduceLibrary.dll";
 
-    Workflow workflow = Workflow(tar_dir, inter_dir, out_dir);
+
+    Workflow workflow = Workflow(tar_dir, inter_dir, out_dir, map_dll, reduce_dll);
 
     std::string correct_tar_dir = ".\\shakespeare";
     boost::filesystem::path tar_path = workflow.getTargetDir();
@@ -266,9 +269,10 @@ TEST(WorkflowTest, testRun)
     std::string tar_dir = ".\\shakespeare";
     std::string inter_dir = ".\\temp2";
     std::string out_dir = ".\\output";
+    std::string map_dll = ".\\dlls\\MapLibrary.dll";
+    std::string reduce_dll = ".\\dlls\\ReduceLibrary.dll";
 
-
-    Workflow workflow = Workflow(tar_dir, inter_dir, out_dir);
+    Workflow workflow = Workflow(tar_dir, inter_dir, out_dir, map_dll, reduce_dll);
 
     workflow.run();
     boost::filesystem::path success_file = boost::filesystem::path{ out_dir + "\\SUCCESS" };

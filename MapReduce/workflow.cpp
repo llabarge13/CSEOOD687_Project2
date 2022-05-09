@@ -7,11 +7,11 @@
 // Workflow class implementation
 #include <string>
 #include <iostream>
-#include <Windows.h>
 #include <boost\filesystem.hpp>
 #include <boost\filesystem\fstream.hpp>
 #include <boost\log\trivial.hpp>
 #include "workflow.h"
+#include "windows.h"
 
 // Constructor that creates boost::filesystem::path objects for the input directory, intermediate files directory and the output directory
 Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg, std::string map_dll_path, std::string reduce_dll_path)
@@ -169,8 +169,6 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 	}
 
 
-
-
 	// Initialize map, sort and reduce objects to null pointers
 	this->map_ = nullptr;
 	this->sorter_ = nullptr;
@@ -184,6 +182,9 @@ Workflow::~Workflow()
 	delete map_;
 	delete sorter_;
 	delete reduce_;
+
+	FreeLibrary(hDLL_map);
+	FreeLibrary(hDLL_reduce);
 }
 // Getters and setters
 boost::filesystem::path Workflow::getTargetDir()

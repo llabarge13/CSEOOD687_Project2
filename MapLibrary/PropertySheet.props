@@ -15,6 +15,9 @@
     <Link>
       <AdditionalLibraryDirectories>$(BoostLib)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "..\$(IntDir)MapLibrary.dll" "..\UnitTests\dlls"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="BoostRoot">
