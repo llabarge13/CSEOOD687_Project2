@@ -29,13 +29,10 @@
     <ClCompile Include="sorting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="workflow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="executive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mapreduce.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="workflow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

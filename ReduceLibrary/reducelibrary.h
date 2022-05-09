@@ -5,11 +5,16 @@
 // April 28, 2022
 // 
 // Reduce class definition
-#include <vector>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <ireduce.h>
+
 #pragma once
+#include "framework.h"
+
+#ifdef REDUCELIBRARY_EXPORTS
+#define REDUCELIBRARY_API __declspec(dllexport)
+#else
+#define REDUCELIBRARY_API __declspec(dllimport)
+#endif
+
 
 // Performs reduce operation on intermediate results.
 // Given sorted data from the intermediate file, reduces the results 
@@ -41,3 +46,6 @@ public:
 	// If reduce operation succeeds, returns 0.
 	int reduce(const std::string& key, const std::vector<int>& values);
 };
+
+extern "C" REDUCELIBRARY_API Reduce * createReducer(const boost::filesystem::path & directory);
+extern "C" REDUCELIBRARY_API void destoryReducer(const Reduce * reducer);

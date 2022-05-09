@@ -5,10 +5,8 @@
 // April 28, 2022
 // 
 // Reduce class implementation
-#include <execution>
-#include <iostream>
-#include <boost/random.hpp>
-#include "reduce.h"
+#include "reducelibrary.h"
+#include "framework.h"
 
 Reduce::Reduce(const boost::filesystem::path& directory) : IReduce<std::string, int>(directory)
 {
@@ -26,4 +24,14 @@ int Reduce::reduce(const std::string& key, const std::vector<int>& values)
 	int result = std::reduce(std::execution::seq, values.begin(), values.end());
 	// Write reduced value
 	return exportToDisk(key, result);
+}
+
+REDUCELIBRARY_API Reduce* createReducer(const boost::filesystem::path& directory)
+{
+	return new Reduce(directory);
+}
+
+REDUCELIBRARY_API void destoryReducer(const Reduce* reducer)
+{
+	delete reducer;
 }

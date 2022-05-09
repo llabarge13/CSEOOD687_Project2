@@ -6,14 +6,14 @@
 // 
 // Google unit tests
 #include "pch.h"
-#include "../MapReduce/sorting.h"
-#include "../MapReduce/map.h"
-#include "../MapReduce/reduce.h"
-#include "../MapReduce/workflow.h"
 #include <string>
 #include <array>
 #include <boost/filesystem.hpp>
 #include <boost/container/map.hpp>
+#include "../MapReduce/sorting.h"
+#include "../MapLibrary/maplibrary.h"
+#include "../ReduceLibrary/reducelibrary.h"
+#include "../MapReduce/workflow.h"
 
 // Verify map writes to the correct file
 TEST(mapTest, checkOutputPath) {
