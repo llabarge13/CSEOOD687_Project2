@@ -1,10 +1,20 @@
 // Map class definition
-#include <string>
-#include <array>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <imap.h>
+
 #pragma once
+
+//#include <string>
+//#include <array>
+//#include <boost/filesystem.hpp>
+//#include <boost/filesystem/fstream.hpp>
+//#include <imap.h>
+
+#include "framework.h"
+
+#ifdef MAPLIBRARY_EXPORTS
+#define MAPLIBRARY_API __declspec(dllexport)
+#else
+#define MAPLIBRARY_API __declspec(dllimport)
+#endif
 
 // Performs map operation on text files
 // Given data from a file, outputs a separate temporary file that 
@@ -29,3 +39,6 @@ public:
 	int map(const std::string& key, const std::string& value);
 
 };
+
+extern "C" MAPLIBRARY_API Map * createMapper(const boost::filesystem::path & directory);
+extern "C" MAPLIBRARY_API void destoryMapper(const Map * mapper);

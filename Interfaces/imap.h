@@ -2,8 +2,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #pragma once
-template <typename KEYT, typename VALUET>
 
+template <typename KEYT, typename VALUET>
 class IMap {
 
 public:

@@ -11,11 +11,14 @@
 #include "sorting.h"
 #include "ireduce.h"
 
+typedef IMap<std::string, std::string>* (*buildMapper)(const boost::filesystem::path&);
+typedef IReduce<std::string, int>* (*buildReducer)(const boost::filesystem::path&);
+
 class Workflow
 {
 	public:
 		// Public member functions
-		Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg);		// constructor
+		Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg, std::string map_dll_path, std::string reduce_dll_path);		// constructor
 		~Workflow();																			// destructor
 		boost::filesystem::path getTargetDir();													// directory containing files to be fed to Map
 		boost::filesystem::path getIntermediateDir();											// directory containing intermediate files from Map
@@ -34,5 +37,12 @@ class Workflow
 		IMap<std::string, std::string> * map_;													// Map is aggregated by Workflow
 		Sorting* sorter_;																		// Sorting is aggregated by Workflow
 		IReduce<std::string, int>* reduce_;														// Reduce is aggregated by Workflow
+
+		buildMapper create_map_;
+		buildReducer create_reduce_;
+
+		HINSTANCE hDLL_map;
+		HINSTANCE hDLL_reduce;
+
 };
 

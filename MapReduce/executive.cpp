@@ -11,9 +11,9 @@
 
 
 // Constructor
-Executive::Executive(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg)
+Executive::Executive(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg, std::string map_dll_path, std::string reduce_dll_path)
 {
-	workflow_ = new Workflow(input_dir_arg, inter_dir_arg, output_dir_arg);
+	workflow_ = new Workflow(input_dir_arg, inter_dir_arg, output_dir_arg, map_dll_path, reduce_dll_path);
 }
 
 

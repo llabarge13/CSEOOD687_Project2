@@ -7,13 +7,14 @@
 // Workflow class implementation
 #include <string>
 #include <iostream>
+#include <Windows.h>
 #include <boost\filesystem.hpp>
 #include <boost\filesystem\fstream.hpp>
 #include <boost\log\trivial.hpp>
 #include "workflow.h"
 
 // Constructor that creates boost::filesystem::path objects for the input directory, intermediate files directory and the output directory
-Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg)
+Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg, std::string map_dll_path, std::string reduce_dll_path)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Debug in Workflow constructor: Entering constructor.";
 
@@ -107,6 +108,69 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 	}
 	BOOST_LOG_TRIVIAL(debug) << "Debug in Workflow constructor: Construction is complete. Exiting constructor.";
 
+	// Check map DLL is a regular file 
+	if ( !(boost::filesystem::is_regular_file(map_dll_path)) )
+	{
+		BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Map DLL is not a regular file.";
+		exit(-1);
+	}
+	// Else get DLL handle for map
+	else
+	{
+		std::wstring widestr = std::wstring(map_dll_path.begin(), map_dll_path.end());
+		const wchar_t* widecstr = widestr.c_str();
+
+		hDLL_map = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to map DLL
+		if (hDLL_map != NULL) {
+			BOOST_LOG_TRIVIAL(info) << "Info in Workflow constructor: Map DLL located.";
+			create_map_ = (buildMapper)GetProcAddress(hDLL_map, "createMapper");
+
+			if (create_map_ == NULL)
+			{
+				BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Function pointer to createMap is NULL.";
+				exit(-1);
+			}
+		}
+		else
+		{
+			BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Failed to get handle of map DLL.";
+			exit(-1);
+		}
+
+	}
+
+	// Check reduce DLL is a regular file 
+	if (!(boost::filesystem::is_regular_file(reduce_dll_path)))
+	{
+		BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Reduce DLL is not a regular file.";
+		exit(-1);
+	}
+	else
+	{
+		std::wstring widestr = std::wstring(reduce_dll_path.begin(), reduce_dll_path.end());
+		const wchar_t* widecstr = widestr.c_str();
+
+		hDLL_reduce = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to map DLL
+		if (hDLL_reduce != NULL) {
+			BOOST_LOG_TRIVIAL(info) << "Info in Workflow constructor: Reduce DLL located.";
+			create_reduce_ = (buildReducer)GetProcAddress(hDLL_reduce, "createReducer");
+
+			if (create_reduce_ == NULL)
+			{
+				BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Function pointer to create_reduce_ is NULL.";
+				exit(-1);
+			}
+		}
+		else
+		{
+			BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Failed to get handle of reduce DLL.";
+			exit(-1);
+		}
+	}
+
+
+
+
 	// Initialize map, sort and reduce objects to null pointers
 	this->map_ = nullptr;
 	this->sorter_ = nullptr;
@@ -171,7 +235,7 @@ void Workflow::run()
 			}
 	
 			// Instantiate Map object on heap
-			this->map_ = new Map(this->intermediate_dir_);
+			this->map_ = create_map_(this->intermediate_dir_);
 
 			// Process all lines of the file via map
 			while (std::getline(input_stream, value))
@@ -225,7 +289,7 @@ void Workflow::run()
 	/////////// REDUCE ////////////////
 	BOOST_LOG_TRIVIAL(info) << "Running reduce operation...";
 	const boost::container::map<std::string, std::vector<int>>& aggregateData = sorter_->getAggregateData();
-	reduce_ = new Reduce(this->out_dir_);
+	reduce_ = create_reduce_(this->out_dir_);
 	for (auto const& pair : aggregateData) {
 		success = this->reduce_->reduce(pair.first, pair.second);
 

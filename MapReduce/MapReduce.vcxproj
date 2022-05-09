@@ -150,6 +150,7 @@
     <ClInclude Include="workflow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="executive.cpp" />
     <ClCompile Include="mapreduce.cpp" />
     <ClCompile Include="sorting.cpp" />
     <ClCompile Include="workflow.cpp" />

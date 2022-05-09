@@ -13,7 +13,7 @@ class Executive
 {
 	public:
 		// Public member functions
-		Executive(std::string target_dir, std::string intermediate_dir, std::string out_dir);		// Constructor takes input directory, dir for intermediate files and output directory as args
+		Executive(std::string target_dir, std::string intermediate_dir, std::string out_dir, std::string map_dll_path, std::string reduce_dll_path);		// Constructor takes input directory, dir for intermediate files and output directory as args
 		~Executive();
 		void run();																				// Calls workflow to run
 
