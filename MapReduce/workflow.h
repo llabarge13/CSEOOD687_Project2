@@ -17,7 +17,6 @@ typedef IReduce<std::string, int>* (*buildReducer)(const boost::filesystem::path
 class Workflow
 {
 	public:
-		// Public member functions
 		Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg, std::string map_dll_path, std::string reduce_dll_path);		// constructor
 		~Workflow();																			// destructor
 		boost::filesystem::path getTargetDir();													// directory containing files to be fed to Map
@@ -25,11 +24,8 @@ class Workflow
 		boost::filesystem::path getOutDir();													// directory containing output file(s) from reduce
 		void run();																				// Runs the map sort reduce workflow
 
-		// Public data members
 
 	private:
-		// Private member functions
-		// Private data members
 		boost::filesystem::path target_dir_;
 		boost::filesystem::path intermediate_dir_;
 		boost::filesystem::path out_dir_;
@@ -38,9 +34,11 @@ class Workflow
 		Sorting* sorter_;																		// Sorting is aggregated by Workflow
 		IReduce<std::string, int>* reduce_;														// Reduce is aggregated by Workflow
 
+		// Interfaces to map and reduce librarys 
 		buildMapper create_map_;
 		buildReducer create_reduce_;
 
+		// Handles to map and reduce DLLs
 		HINSTANCE hDLL_map;
 		HINSTANCE hDLL_reduce;
 

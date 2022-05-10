@@ -1,15 +1,11 @@
 // Map class definition
-
 #pragma once
-
-//#include <string>
-//#include <array>
-//#include <boost/filesystem.hpp>
-//#include <boost/filesystem/fstream.hpp>
-//#include <imap.h>
 
 #include "framework.h"
 
+/*	Decorate with dllexport or dllimport depending
+	on whether MAPLIBRARY_EXPORTS is defined
+*/
 #ifdef MAPLIBRARY_EXPORTS
 #define MAPLIBRARY_API __declspec(dllexport)
 #else

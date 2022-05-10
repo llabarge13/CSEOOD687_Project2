@@ -54,6 +54,7 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 		// Create a directory for the intermediate files to go 
 		if (!(boost::filesystem::create_directory(inter_dir_arg)))
 		{
+			// Directory for intermediate files failed to be created
 			BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: directory for intermediate files was not created.";
 			exit(-1);
 		}
@@ -106,7 +107,6 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 	{
 		BOOST_LOG_TRIVIAL(info) << "Info in Workflow constructor: Directory for output files created.";
 	}
-	BOOST_LOG_TRIVIAL(debug) << "Debug in Workflow constructor: Construction is complete. Exiting constructor.";
 
 	// Check map DLL is a regular file 
 	if ( !(boost::filesystem::is_regular_file(map_dll_path)) )
@@ -120,17 +120,21 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 		std::wstring widestr = std::wstring(map_dll_path.begin(), map_dll_path.end());
 		const wchar_t* widecstr = widestr.c_str();
 
+		// Create a handle to map DLL
 		hDLL_map = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to map DLL
 		if (hDLL_map != NULL) {
 			BOOST_LOG_TRIVIAL(info) << "Info in Workflow constructor: Map DLL located.";
 			create_map_ = (buildMapper)GetProcAddress(hDLL_map, "createMapper");
 
+			// If function pointer to createMap fails to be created, log and exit
 			if (create_map_ == NULL)
 			{
 				BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Function pointer to createMap is NULL.";
 				exit(-1);
 			}
 		}
+
+		// Else log that handle of Map DLL failed to be created and exit
 		else
 		{
 			BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Failed to get handle of map DLL.";
@@ -145,22 +149,25 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 		BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Reduce DLL is not a regular file.";
 		exit(-1);
 	}
+	// Else attempt to get a handle for the Reduce DLL
 	else
 	{
 		std::wstring widestr = std::wstring(reduce_dll_path.begin(), reduce_dll_path.end());
 		const wchar_t* widecstr = widestr.c_str();
 
-		hDLL_reduce = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to map DLL
+		hDLL_reduce = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to Reduce DLL
 		if (hDLL_reduce != NULL) {
 			BOOST_LOG_TRIVIAL(info) << "Info in Workflow constructor: Reduce DLL located.";
 			create_reduce_ = (buildReducer)GetProcAddress(hDLL_reduce, "createReducer");
 
+			// If create_reduce_ function pointer is NULL, then log and exit
 			if (create_reduce_ == NULL)
 			{
 				BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Function pointer to create_reduce_ is NULL.";
 				exit(-1);
 			}
 		}
+		// Else log failure to get Reduce DLL handle and exit
 		else
 		{
 			BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Failed to get handle of reduce DLL.";
@@ -186,25 +193,27 @@ Workflow::~Workflow()
 	FreeLibrary(hDLL_map);
 	FreeLibrary(hDLL_reduce);
 }
-// Getters and setters
+// Getter for target_dir_ data member
 boost::filesystem::path Workflow::getTargetDir()
 {
 	// This function returns the boost::filesystem::path object private data member targetDir
 
 	return this->target_dir_;
 }
+// Getter for intermediate_dir_ data member
 boost::filesystem::path Workflow::getIntermediateDir()
 {
 	// This function returns the boost::filesystem::path object private data member intermediateDir
 	return this->intermediate_dir_;
 }
+// Getter for out_dir_ data member
 boost::filesystem::path Workflow::getOutDir()
 {
 	// This function returns the boost::filesystem::path object private data member outDir
 	return this->out_dir_;
 }
 
-// Run a workflow
+// Run a workflow consisting of map, sort and reduce on all files in target directory
 void Workflow::run()
 {
 
@@ -312,6 +321,6 @@ void Workflow::run()
 	for (boost::filesystem::directory_iterator end_dir_it, it(this->intermediate_dir_); it != end_dir_it; ++it) {
 		boost::filesystem::remove_all(it->path());
 	}
-
+	// Log success of workflow run
 	BOOST_LOG_TRIVIAL(info) << "Map reduce process complete.";
 }

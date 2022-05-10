@@ -9,6 +9,9 @@
 #pragma once
 #include "framework.h"
 
+/*	Decorate with either dllexport or dllimport depending
+	on whether REDUCELIBRARY_EXPORTS is defined
+*/
 #ifdef REDUCELIBRARY_EXPORTS
 #define REDUCELIBRARY_API __declspec(dllexport)
 #else

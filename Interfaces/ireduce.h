@@ -41,6 +41,7 @@ protected:
 	virtual int exportToDisk(const KEYT& key, VALUET value);
 };
 
+// IReduce Constructor
 template<typename KEYT, typename VALUET>
 inline IReduce<KEYT, VALUET>::IReduce(const boost::filesystem::path& directory)
 {
@@ -51,6 +52,7 @@ inline IReduce<KEYT, VALUET>::IReduce(const boost::filesystem::path& directory)
 	output_stream_ = new boost::filesystem::ofstream{ output_path_ };
 }
 
+// Destructor
 template<typename KEYT, typename VALUET>
 inline IReduce<KEYT, VALUET>::~IReduce()
 {
@@ -61,25 +63,32 @@ inline IReduce<KEYT, VALUET>::~IReduce()
 	delete output_stream_;
 }
 
+// Getter for output_path_ data member
 template<typename KEYT, typename VALUET>
 inline boost::filesystem::path IReduce<KEYT, VALUET>::getOutputPath()
 {
 	return output_path_;
 }
 
+// Getter for output_directory_ data member
 template<typename KEYT, typename VALUET>
 inline boost::filesystem::path IReduce<KEYT, VALUET>::getOutputDirectory()
 {
 	return output_directory_;
 }
 
+// Export to disk writes (key, sum values) to output_file_
 template<typename KEYT, typename VALUET>
 inline int IReduce<KEYT, VALUET>::exportToDisk(const KEYT& key, VALUET value)
 {
+	// Open the output_stream_ if it is not open
 	if (!output_stream_->is_open()) {
 		output_stream_->open(output_path_, std::ios_base::app);
 	}
 
+	/*	If output_stream_ does not fail to open, then output(key, reduced value)
+		to output_stream_
+	*/
 	if (!output_stream_->fail()) {
 		// Write result to disk 
 		*(output_stream_) << "(";
@@ -90,6 +99,7 @@ inline int IReduce<KEYT, VALUET>::exportToDisk(const KEYT& key, VALUET value)
 		output_stream_->close();
 		return 0;
 	}
+	// Else return -1 to flag a failure
 	else {
 		return -1;
 	}

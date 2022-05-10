@@ -3,6 +3,10 @@
 #include <boost/filesystem/fstream.hpp>
 #pragma once
 
+/*	Template class IMap is a base clase that serves as an interface
+	for the map library.
+*/
+
 template <typename KEYT, typename VALUET>
 class IMap {
 
@@ -10,6 +14,7 @@ public:
 	IMap(const boost::filesystem::path& directory);
 	~IMap();
 
+	// Key = file name, value = Line of text from file. Returns 0 on success.
 	virtual int map(const KEYT& key, const VALUET& value) = 0;
 
 
@@ -34,7 +39,7 @@ protected:
 		int value);
 };
 
-
+//	IMap constructor takes boost filesystem path as argument
 template<typename KEYT, typename VALUET>
 inline IMap<KEYT, VALUET>::IMap(const boost::filesystem::path& directory)
 {
@@ -44,6 +49,7 @@ inline IMap<KEYT, VALUET>::IMap(const boost::filesystem::path& directory)
 		output_buffer_.size());
 }
 
+// Destructor
 template<typename KEYT, typename VALUET>
 inline IMap<KEYT, VALUET>::~IMap()
 {
@@ -54,18 +60,21 @@ inline IMap<KEYT, VALUET>::~IMap()
 	delete output_stream_;
 }
 
+// Getter for OutputPath data member
 template<typename KEYT, typename VALUET>
 inline boost::filesystem::path IMap<KEYT, VALUET>::getOutputPath()
 {
 	return output_path_;
 }
 
+// Getter for OutputDirectory data member
 template<typename KEYT, typename VALUET>
 inline boost::filesystem::path IMap<KEYT, VALUET>::getOutputDirectory()
 {
 	return output_directory_;
 }
 
+//	Export to disk takes string filename, keyand value as input.
 template<typename KEYT, typename VALUET>
 inline int IMap<KEYT, VALUET>::exportToDisk(const std::string& filename, const KEYT& key, int value)
 {
