@@ -34,55 +34,59 @@ If the intermediate directory or the output directory does not already exist, th
 ## Expected Output
 ### Command
 ```
-.\MapReduce.exe "C:\Users\llaba\source\repos\CSE687OOD_Project2\MapReduce\shakespeare" "C:\Users\llaba\source\repos\CSE687OOD_Project2\MapReduce\temp" "C:\Users\llaba\source\repos\CSE687OOD_Project2\MapReduce\output" "C:\Users\llaba\source\repos\CSE687OOD_Project2\x64\Release\MapLibrary.dll" "C:\Users\llaba\source\repos\CSE687OOD_Project2\x64\Release\ReduceLibrary.dll"
+.\MapReduce.exe "..\..\MapReduce\shakespeare" ".\temp" ".\output" ".\MapLibrary.dll" ".\ReduceLibrary.dll"
 ```
 ### Command Line Output 
 ```
-[2022-05-11 17:02:14.630203] [0x00006730] [info]    targetDir member has been set in Workflow constructor.
-[2022-05-11 17:02:14.631203] [0x00006730] [info]    Info in Workflow constructor: intermediateDir member has been set in Workflow constructor.
-[2022-05-11 17:02:14.631704] [0x00006730] [info]    Info in Workflow constructor: Directory for intermediate files created.
-[2022-05-11 17:02:14.632204] [0x00006730] [info]    Info in Workflow constructor: outDir member has been set in Workflow constructor.
-[2022-05-11 17:02:14.632204] [0x00006730] [info]    Info in Workflow constructor: Directory for output files created.
-[2022-05-11 17:02:14.633704] [0x00006730] [info]    Info in Workflow constructor: Map DLL located.
-[2022-05-11 17:02:14.634704] [0x00006730] [info]    Info in Workflow constructor: Reduce DLL located.
-[2022-05-11 17:02:14.695715] [0x00006730] [info]    Info in Workflow run(): Map process completed for All'sWellThatEndsWell.txt
-[2022-05-11 17:02:14.736622] [0x00006730] [info]    Info in Workflow run(): Map process completed for AMidSummerNightsDream.txt
-[2022-05-11 17:02:14.787130] [0x00006730] [info]    Info in Workflow run(): Map process completed for AsYouLIkeIte.txt
-[2022-05-11 17:02:14.850641] [0x00006730] [info]    Info in Workflow run(): Map process completed for Cymbeline.txt
-[2022-05-11 17:02:14.902150] [0x00006730] [info]    Info in Workflow run(): Map process completed for Love'sLabourLost.txt
-[2022-05-11 17:02:14.953228] [0x00006730] [info]    Info in Workflow run(): Map process completed for MeasureForMeasure.txt
-[2022-05-11 17:02:15.003239] [0x00006730] [info]    Info in Workflow run(): Map process completed for MuchAdoAboutNothing.txt
-[2022-05-11 17:02:15.050247] [0x00006730] [info]    Info in Workflow run(): Map process completed for PericlesPrinceOfTyre.txt
-[2022-05-11 17:02:15.099236] [0x00006730] [info]    Info in Workflow run(): Map process completed for TamingOfTheShrew.txt
-[2022-05-11 17:02:15.135372] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheComedyOfErrors.txt
-[2022-05-11 17:02:15.184014] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheMerchantOfVenice.txt
-[2022-05-11 17:02:15.240524] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheMerryWivesOfWindsor.txt
-[2022-05-11 17:02:15.279531] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheTempest.txt
-[2022-05-11 17:02:15.327539] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheTwelthNight.txt
-[2022-05-11 17:02:15.371652] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheTwoGentlemenOfVerona.txt
-[2022-05-11 17:02:15.433160] [0x00006730] [info]    Info in Workflow run(): Map process completed for TroilusAndCressida .txt
-[2022-05-11 17:02:15.490527] [0x00006730] [info]    Info in Workflow run(): Map process completed for Winter'sTale.txt
-[2022-05-11 17:02:15.491027] [0x00006730] [info]    Running sort on All'sWellThatEndsWell.txt
-[2022-05-11 17:02:15.503530] [0x00006730] [info]    Running sort on AMidSummerNightsDream.txt
-[2022-05-11 17:02:15.512031] [0x00006730] [info]    Running sort on AsYouLIkeIte.txt
-[2022-05-11 17:02:15.523533] [0x00006730] [info]    Running sort on Cymbeline.txt
-[2022-05-11 17:02:15.538035] [0x00006730] [info]    Running sort on Love'sLabourLost.txt
-[2022-05-11 17:02:15.549537] [0x00006730] [info]    Running sort on MeasureForMeasure.txt
-[2022-05-11 17:02:15.561039] [0x00006730] [info]    Running sort on MuchAdoAboutNothing.txt
-[2022-05-11 17:02:15.572542] [0x00006730] [info]    Running sort on PericlesPrinceOfTyre.txt
-[2022-05-11 17:02:15.582043] [0x00006730] [info]    Running sort on TamingOfTheShrew.txt
-[2022-05-11 17:02:15.593546] [0x00006730] [info]    Running sort on TheComedyOfErrors.txt
-[2022-05-11 17:02:15.601547] [0x00006730] [info]    Running sort on TheMerchantOfVenice.txt
-[2022-05-11 17:02:15.613048] [0x00006730] [info]    Running sort on TheMerryWivesOfWindsor.txt
-[2022-05-11 17:02:15.625050] [0x00006730] [info]    Running sort on TheTempest.txt
-[2022-05-11 17:02:15.633552] [0x00006730] [info]    Running sort on TheTwelthNight.txt
-[2022-05-11 17:02:15.644554] [0x00006730] [info]    Running sort on TheTwoGentlemenOfVerona.txt
-[2022-05-11 17:02:15.653556] [0x00006730] [info]    Running sort on TroilusAndCressida .txt
-[2022-05-11 17:02:15.667058] [0x00006730] [info]    Running sort on Winter'sTale.txt
-[2022-05-11 17:02:15.680560] [0x00006730] [info]    Running reduce operation...
-[2022-05-11 17:02:20.073196] [0x00006730] [info]    Writing success file...
-[2022-05-11 17:02:20.073697] [0x00006730] [info]    Removing intermediate files...
-[2022-05-11 17:02:20.080198] [0x00006730] [info]    Map reduce process complete.
+[2022-05-11 18:00:15.188198] [0x00006dbc] [info]    targetDir member has been set in Workflow constructor.
+[2022-05-11 18:00:15.188698] [0x00006dbc] [warning] Warning in Workflow constructor: argv[2] is not a directory
+
+[2022-05-11 18:00:15.189199] [0x00006dbc] [info]    Info in Workflow constructor: Creating directory at .\temp now...
+[2022-05-11 18:00:15.189199] [0x00006dbc] [info]    Info in Workflow constructor: Directory for intermediate files created.
+[2022-05-11 18:00:15.189700] [0x00006dbc] [warning] Warning in Workflow constructor: argv[3] is not a directory
+
+[2022-05-11 18:00:15.189700] [0x00006dbc] [info]    Info in Workflow constructor: Creating directory at .\temp now...
+[2022-05-11 18:00:15.190192] [0x00006dbc] [info]    Info in Workflow constructor: Directory for output files created.
+[2022-05-11 18:00:15.190699] [0x00006dbc] [info]    Info in Workflow constructor: Map DLL located.
+[2022-05-11 18:00:15.191690] [0x00006dbc] [info]    Info in Workflow constructor: Reduce DLL located.
+[2022-05-11 18:00:15.989329] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for All'sWellThatEndsWell.txt
+[2022-05-11 18:00:16.553427] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for AMidSummerNightsDream.txt
+[2022-05-11 18:00:17.298251] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for AsYouLIkeIte.txt
+[2022-05-11 18:00:18.241415] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for Cymbeline.txt
+[2022-05-11 18:00:18.998048] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for Love'sLabourLost.txt
+[2022-05-11 18:00:19.759180] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for MeasureForMeasure.txt
+[2022-05-11 18:00:20.493307] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for MuchAdoAboutNothing.txt
+[2022-05-11 18:00:21.139921] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for PericlesPrinceOfTyre.txt
+[2022-05-11 18:00:21.866047] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TamingOfTheShrew.txt
+[2022-05-11 18:00:22.391638] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TheComedyOfErrors.txt
+[2022-05-11 18:00:24.543288] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TheMerchantOfVenice.txt
+[2022-05-11 18:00:25.320423] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TheMerryWivesOfWindsor.txt
+[2022-05-11 18:00:25.888022] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TheTempest.txt
+[2022-05-11 18:00:26.578642] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TheTwelthNight.txt
+[2022-05-11 18:00:27.168745] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TheTwoGentlemenOfVerona.txt
+[2022-05-11 18:00:28.065401] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for TroilusAndCressida .txt
+[2022-05-11 18:00:28.902547] [0x00006dbc] [info]    Info in Workflow run(): Map process completed for Winter'sTale.txt
+[2022-05-11 18:00:28.903548] [0x00006dbc] [info]    Running sort on All'sWellThatEndsWell.txt
+[2022-05-11 18:00:29.435140] [0x00006dbc] [info]    Running sort on AMidSummerNightsDream.txt
+[2022-05-11 18:00:29.808705] [0x00006dbc] [info]    Running sort on AsYouLIkeIte.txt
+[2022-05-11 18:00:30.311793] [0x00006dbc] [info]    Running sort on Cymbeline.txt
+[2022-05-11 18:00:30.943402] [0x00006dbc] [info]    Running sort on Love'sLabourLost.txt
+[2022-05-11 18:00:31.455992] [0x00006dbc] [info]    Running sort on MeasureForMeasure.txt
+[2022-05-11 18:00:31.959579] [0x00006dbc] [info]    Running sort on MuchAdoAboutNothing.txt
+[2022-05-11 18:00:32.443664] [0x00006dbc] [info]    Running sort on PericlesPrinceOfTyre.txt
+[2022-05-11 18:00:32.871238] [0x00006dbc] [info]    Running sort on TamingOfTheShrew.txt
+[2022-05-11 18:00:33.352823] [0x00006dbc] [info]    Running sort on TheComedyOfErrors.txt
+[2022-05-11 18:00:33.719886] [0x00006dbc] [info]    Running sort on TheMerchantOfVenice.txt
+[2022-05-11 18:00:34.202970] [0x00006dbc] [info]    Running sort on TheMerryWivesOfWindsor.txt
+[2022-05-11 18:00:34.719060] [0x00006dbc] [info]    Running sort on TheTempest.txt
+[2022-05-11 18:00:35.103627] [0x00006dbc] [info]    Running sort on TheTwelthNight.txt
+[2022-05-11 18:00:35.578710] [0x00006dbc] [info]    Running sort on TheTwoGentlemenOfVerona.txt
+[2022-05-11 18:00:35.981280] [0x00006dbc] [info]    Running sort on TroilusAndCressida .txt
+[2022-05-11 18:00:36.584885] [0x00006dbc] [info]    Running sort on Winter'sTale.txt
+[2022-05-11 18:00:37.156984] [0x00006dbc] [info]    Running reduce operation...
+[2022-05-11 18:00:41.511021] [0x00006dbc] [info]    Writing success file...
+[2022-05-11 18:00:41.512022] [0x00006dbc] [info]    Removing intermediate files...
+[2022-05-11 18:00:41.648603] [0x00006dbc] [info]    Map reduce process complete.
 ```
 
 ### File Output
