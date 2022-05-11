@@ -32,7 +32,9 @@ TEST(mapTest, checkOutputPath) {
     std::string file = "test.txt";
 
     Map* m = createMapper(directory);
+
     int success = m->map(file, text);
+    std::cout << m->getOutputPath() << std::endl;
     EXPECT_EQ(success, 0);
 
     // Check the output path is the expected output path

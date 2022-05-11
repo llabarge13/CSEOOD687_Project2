@@ -18,6 +18,9 @@
     <PostBuildEvent>
       <Command>xcopy /y /d "..\$(IntDir)ReduceLibrary.dll" "..\UnitTests\dlls"</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if not exist "..\UnitTests\dlls" mkdir "..\UnitTests\dlls"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <BuildMacro Include="BoostLib">
