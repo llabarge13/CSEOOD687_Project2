@@ -4,17 +4,20 @@ May 12, 2022
 Authors: Todd Hricik, Lyndsay LaBarge
 
 ## Overview
-The Visual Studio Solution contains five seperate projects. 
+The Visual Studio Solution contains five seperate projects. We are using Visual Studio 2022.
 
 The MapReduce project contains the implementation of the primary command line application.
 
 The UnitTests project contains our Google Unit tests.
 
-The Interfaces project contains out map and reduce interfaces, IMap and IReduce. These are template abstract classes.
+The Interfaces project contains out map and reduce interfaces, IMap and IReduce. These are template abstract classes. Concrete classes must include a map and reduce class 
+method respectively.
 
-The MapLibrary project contains our DLL library with our concrete Map class implementation.
+The MapLibrary project contains our DLL library with our concrete Map class implementation. It follows the factory method pattern and contains a single function,
+createMapper that returns a pointer to a concrete Map class object. The createMapper function takes single parameter, the output directory the object writes its results to.
 
-The ReduceLibrary project contains our DLL library with our concrete Reduce class implementation.
+The ReduceLibrary project contains our DLL library with our concrete Reduce class implementation. It follows the factory method pattern and contains a single function,
+createReducer that returns a pointer to a concrete Reduce class object. The createReducer function takes single parameter, the output directory the object writes its results to.
 
 We used C++ 17 and the boost C++ library (version 1.79). We used the boost Filesystem as opposed to implementating our own file management class.
 
