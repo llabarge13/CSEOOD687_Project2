@@ -97,7 +97,7 @@ template<typename KEYT, typename VALUET>
 inline int IMap<KEYT, VALUET>::exportToDisk(const std::string& filename, const KEYT& key, int value)
 {
 	boost::filesystem::path filePath = boost::filesystem::path{
-	output_directory_.string() + "\\" + filename
+		output_directory_.string() + "\\" + filename
 	};
 
 	// Started to process a new file
