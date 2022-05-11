@@ -1,26 +1,39 @@
+// ireduce.h
+// Lyndsay LaBarge, Todd Hricik
+// CSE687 Object Oriented Design
+// May 12, 2022
+// 
+// Template class IReduce is a base clase that serves as an interface
+// for the reduce library.
+// 
+// Abstract class.
 #include <array>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #pragma once
+
+
 template <typename KEYT, typename VALUET>
 class IReduce
 {
 
 public:
+
+	// Create a new IReduce object that will write results to
+	// the given directory
 	IReduce(const boost::filesystem::path& directory);
 
-	// Reduce object must be deleted or go out of scope
+	// IReduce concrete object must be deleted or go out of scope
 	// and be destroyed on the stack, otherwise the output
-	// file will not be able to be read until the Reduce object
+	// file will not be able to be read until the object
 	// class relinquishes it .
 	~IReduce();
 
 	// Performs reduce operation on intermediate results.
-	// Given sorted data from the intermediate file, reduces the results 
-	// by aggregating the values and output result to a file.
-	// e.g. (word, [1, 1]) -> (word, 2)
 	// If reduce operation fails (cannot write to file), returns -1. 
 	// If reduce operation succeeds, returns 0.
+	//
+	// Abstract class method, must be defined.
 	virtual int reduce(const KEYT& key, const std::vector<VALUET>& values) = 0;
 
 	// Gets the path of the output file

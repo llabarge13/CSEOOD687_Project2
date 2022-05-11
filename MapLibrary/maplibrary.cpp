@@ -1,18 +1,9 @@
-// map.cpp
-// Lyndsay LaBarge
+// maplibrary.cpp
+// Lyndsay LaBarge, Todd Hricik
 // CSE687 Object Oriented Design
-// Project 1
-// April 28, 2022
+// May 12, 2022
 // 
-// Map class implementation
-
-//#include <iostream>
-//#include <string>
-//#include <boost/tokenizer.hpp>
-//#include <boost/algorithm/string.hpp>
-//#include <boost/filesystem.hpp>
-//#include "map.h"
-
+// Map class and library definition.
 #include "maplibrary.h"
 #include "framework.h"
 
@@ -21,10 +12,11 @@ Map::Map(const boost::filesystem::path& directory) : IMap<std::string, std::stri
 {
 }
 
-/*	Given a key containing a filename, tokenize the 
-	text in value. Finally export each (token, value)
-	pair to the intermediate file directory
-*/
+// Given data from a file, writes to a separate temporary file that 
+// holds (word, 1) for each occurrence of every word.
+// If the map operation failed (could not write to the file), 
+// returns -1.
+// If the map operation succeeded, returns 0.
 int Map::map(const std::string& key, const std::string& value)
 {
 	int export_success;

@@ -1,19 +1,29 @@
-# CSE687 Project 1: Map Reduce
-April 28, 2022
+# CSE687 Project 2: Map Reduce
+May 12, 2022
 
 Authors: Todd Hricik, Lyndsay LaBarge
 
 ## Overview
-The Visual Studio Solution contains two seperate projects. The MapReduce project contains the implementation of the Project 1 command line application. The UnitTests project contains our Google Unit tests.
+The Visual Studio Solution contains five seperate projects. 
+
+The MapReduce project contains the implementation of the primary command line application.
+
+The UnitTests project contains our Google Unit tests.
+
+The Interfaces project contains out map and reduce interfaces, IMap and IReduce. These are template abstract classes.
+
+The MapLibrary project contains our DLL library with our concrete Map class implementation.
+
+The ReduceLibrary project contains our DLL library with our concrete Reduce class implementation.
 
 We used C++ 17 and the boost C++ library (version 1.79). We used the boost Filesystem as opposed to implementating our own file management class.
 
 ## Build
-Both projects use a properties sheet. To build the projects, you will need to change the values of the user macros BoostRoot and BoostLib in MapReduce > PropertySheet.props, UnitTests > PropertySheet.props, and UnitTests > PropertySheetRelease.props. By default they are set to `C:\Program Files\boost\boost_1_79_0` and `C:\Program Files\boost\boost_1_79_0\stage\lib`. To build, use either the Debug or Release configuration for x64 platforms.
+All projects use a properties sheet. To build the projects, you will need to change the values of the user macros BoostRoot and BoostLib in MapReduce > PropertySheet.props, UnitTests > PropertySheet.props, Interfaces > PropertySheet.props, MapLibrary > PropertySheet.props, and ReduceLibrary > PropertySheet.props. By default they are set to `C:\Program Files\boost\boost_ 1_79_0` and `C:\Program Files\boost\boost_1_79_0\stage\lib`. To build, use either the Debug or Release configuration for x64 platforms.
 
 ## Usage
 ```
-MapReduce.exe <path of directory containging input files> <directory for intermediate files> <path of dir for output files>.
+MapReduce.exe <path of dir containging input files> <path of dir for intermediate files> <path of dir for output files <path of map DLL> <path of reduce DLL>
 ```
 All command line requirements are required. 
 
@@ -22,51 +32,57 @@ The input directory must contain UTF-8 encoded text files. If the input director
 If the intermediate directory or the output directory does not already exist, the application will create the directories.
 
 ## Expected Output
-### Command Line
+### Command
 ```
-[2022-04-30 10:06:21.824128] [0x00008378] [info]    targetDir member has been set in Workflow constructor.
-[2022-04-30 10:06:21.825128] [0x00008378] [info]    Info in Workflow constructor: intermediateDir member has been set in Workflow constructor.
-[2022-04-30 10:06:21.825629] [0x00008378] [info]    Info in Workflow constructor: Directory for intermediate files created.
-[2022-04-30 10:06:21.826128] [0x00008378] [info]    Info in Workflow constructor: outDir member has been set in Workflow constructor.
-[2022-04-30 10:06:21.826128] [0x00008378] [info]    Info in Workflow constructor: Directory for output files created.
-[2022-04-30 10:06:21.887639] [0x00008378] [info]    Info in Workflow run(): Map process completed for All'sWellThatEndsWell.txt
-[2022-04-30 10:06:21.930646] [0x00008378] [info]    Info in Workflow run(): Map process completed for AMidSummerNightsDream.txt
-[2022-04-30 10:06:21.971154] [0x00008378] [info]    Info in Workflow run(): Map process completed for AsYouLIkeIte.txt
-[2022-04-30 10:06:22.024663] [0x00008378] [info]    Info in Workflow run(): Map process completed for Cymbeline.txt
-[2022-04-30 10:06:22.075671] [0x00008378] [info]    Info in Workflow run(): Map process completed for Love'sLabourLost.txt
-[2022-04-30 10:06:22.127181] [0x00008378] [info]    Info in Workflow run(): Map process completed for MeasureForMeasure.txt
-[2022-04-30 10:06:22.176689] [0x00008378] [info]    Info in Workflow run(): Map process completed for MuchAdoAboutNothing.txt
-[2022-04-30 10:06:22.226198] [0x00008378] [info]    Info in Workflow run(): Map process completed for PericlesPrinceOfTyre.txt
-[2022-04-30 10:06:22.275706] [0x00008378] [info]    Info in Workflow run(): Map process completed for TamingOfTheShrew.txt
-[2022-04-30 10:06:22.312213] [0x00008378] [info]    Info in Workflow run(): Map process completed for TheComedyOfErrors.txt
-[2022-04-30 10:06:22.361221] [0x00008378] [info]    Info in Workflow run(): Map process completed for TheMerchantOfVenice.txt
-[2022-04-30 10:06:22.419232] [0x00008378] [info]    Info in Workflow run(): Map process completed for TheMerryWivesOfWindsor.txt
-[2022-04-30 10:06:22.458739] [0x00008378] [info]    Info in Workflow run(): Map process completed for TheTempest.txt
-[2022-04-30 10:06:22.514249] [0x00008378] [info]    Info in Workflow run(): Map process completed for TheTwelthNight.txt
-[2022-04-30 10:06:22.551254] [0x00008378] [info]    Info in Workflow run(): Map process completed for TheTwoGentlemenOfVerona.txt
-[2022-04-30 10:06:22.600763] [0x00008378] [info]    Info in Workflow run(): Map process completed for TroilusAndCressida .txt
-[2022-04-30 10:06:22.653273] [0x00008378] [info]    Info in Workflow run(): Map process completed for Winter'sTale.txt
-[2022-04-30 10:06:22.654272] [0x00008378] [info]    Running sort on All'sWellThatEndsWell.txt
-[2022-04-30 10:06:22.670275] [0x00008378] [info]    Running sort on AMidSummerNightsDream.txt
-[2022-04-30 10:06:22.681777] [0x00008378] [info]    Running sort on AsYouLIkeIte.txt
-[2022-04-30 10:06:22.696780] [0x00008378] [info]    Running sort on Cymbeline.txt
-[2022-04-30 10:06:22.716284] [0x00008378] [info]    Running sort on Love'sLabourLost.txt
-[2022-04-30 10:06:22.729285] [0x00008378] [info]    Running sort on MeasureForMeasure.txt
-[2022-04-30 10:06:22.744788] [0x00008378] [info]    Running sort on MuchAdoAboutNothing.txt
-[2022-04-30 10:06:22.757790] [0x00008378] [info]    Running sort on PericlesPrinceOfTyre.txt
-[2022-04-30 10:06:22.772793] [0x00008378] [info]    Running sort on TamingOfTheShrew.txt
-[2022-04-30 10:06:22.787629] [0x00008378] [info]    Running sort on TheComedyOfErrors.txt
-[2022-04-30 10:06:22.797298] [0x00008378] [info]    Running sort on TheMerchantOfVenice.txt
-[2022-04-30 10:06:22.809299] [0x00008378] [info]    Running sort on TheMerryWivesOfWindsor.txt
-[2022-04-30 10:06:22.821801] [0x00008378] [info]    Running sort on TheTempest.txt
-[2022-04-30 10:06:22.831303] [0x00008378] [info]    Running sort on TheTwelthNight.txt
-[2022-04-30 10:06:22.842805] [0x00008378] [info]    Running sort on TheTwoGentlemenOfVerona.txt
-[2022-04-30 10:06:22.852807] [0x00008378] [info]    Running sort on TroilusAndCressida .txt
-[2022-04-30 10:06:22.872310] [0x00008378] [info]    Running sort on Winter'sTale.txt
-[2022-04-30 10:06:22.889813] [0x00008378] [info]    Running reduce operation...
-[2022-04-30 10:06:27.347590] [0x00008378] [info]    Writing success file...
-[2022-04-30 10:06:27.348590] [0x00008378] [info]    Removing intermediate files...
-[2022-04-30 10:06:27.403099] [0x00008378] [info]    Map reduce process complete.
+.\MapReduce.exe "C:\Users\llaba\source\repos\CSE687OOD_Project2\MapReduce\shakespeare" "C:\Users\llaba\source\repos\CSE687OOD_Project2\MapReduce\temp" "C:\Users\llaba\source\repos\CSE687OOD_Project2\MapReduce\output" "C:\Users\llaba\source\repos\CSE687OOD_Project2\x64\Release\MapLibrary.dll" "C:\Users\llaba\source\repos\CSE687OOD_Project2\x64\Release\ReduceLibrary.dll"
+```
+### Command Line Output 
+```
+[2022-05-11 17:02:14.630203] [0x00006730] [info]    targetDir member has been set in Workflow constructor.
+[2022-05-11 17:02:14.631203] [0x00006730] [info]    Info in Workflow constructor: intermediateDir member has been set in Workflow constructor.
+[2022-05-11 17:02:14.631704] [0x00006730] [info]    Info in Workflow constructor: Directory for intermediate files created.
+[2022-05-11 17:02:14.632204] [0x00006730] [info]    Info in Workflow constructor: outDir member has been set in Workflow constructor.
+[2022-05-11 17:02:14.632204] [0x00006730] [info]    Info in Workflow constructor: Directory for output files created.
+[2022-05-11 17:02:14.633704] [0x00006730] [info]    Info in Workflow constructor: Map DLL located.
+[2022-05-11 17:02:14.634704] [0x00006730] [info]    Info in Workflow constructor: Reduce DLL located.
+[2022-05-11 17:02:14.695715] [0x00006730] [info]    Info in Workflow run(): Map process completed for All'sWellThatEndsWell.txt
+[2022-05-11 17:02:14.736622] [0x00006730] [info]    Info in Workflow run(): Map process completed for AMidSummerNightsDream.txt
+[2022-05-11 17:02:14.787130] [0x00006730] [info]    Info in Workflow run(): Map process completed for AsYouLIkeIte.txt
+[2022-05-11 17:02:14.850641] [0x00006730] [info]    Info in Workflow run(): Map process completed for Cymbeline.txt
+[2022-05-11 17:02:14.902150] [0x00006730] [info]    Info in Workflow run(): Map process completed for Love'sLabourLost.txt
+[2022-05-11 17:02:14.953228] [0x00006730] [info]    Info in Workflow run(): Map process completed for MeasureForMeasure.txt
+[2022-05-11 17:02:15.003239] [0x00006730] [info]    Info in Workflow run(): Map process completed for MuchAdoAboutNothing.txt
+[2022-05-11 17:02:15.050247] [0x00006730] [info]    Info in Workflow run(): Map process completed for PericlesPrinceOfTyre.txt
+[2022-05-11 17:02:15.099236] [0x00006730] [info]    Info in Workflow run(): Map process completed for TamingOfTheShrew.txt
+[2022-05-11 17:02:15.135372] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheComedyOfErrors.txt
+[2022-05-11 17:02:15.184014] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheMerchantOfVenice.txt
+[2022-05-11 17:02:15.240524] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheMerryWivesOfWindsor.txt
+[2022-05-11 17:02:15.279531] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheTempest.txt
+[2022-05-11 17:02:15.327539] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheTwelthNight.txt
+[2022-05-11 17:02:15.371652] [0x00006730] [info]    Info in Workflow run(): Map process completed for TheTwoGentlemenOfVerona.txt
+[2022-05-11 17:02:15.433160] [0x00006730] [info]    Info in Workflow run(): Map process completed for TroilusAndCressida .txt
+[2022-05-11 17:02:15.490527] [0x00006730] [info]    Info in Workflow run(): Map process completed for Winter'sTale.txt
+[2022-05-11 17:02:15.491027] [0x00006730] [info]    Running sort on All'sWellThatEndsWell.txt
+[2022-05-11 17:02:15.503530] [0x00006730] [info]    Running sort on AMidSummerNightsDream.txt
+[2022-05-11 17:02:15.512031] [0x00006730] [info]    Running sort on AsYouLIkeIte.txt
+[2022-05-11 17:02:15.523533] [0x00006730] [info]    Running sort on Cymbeline.txt
+[2022-05-11 17:02:15.538035] [0x00006730] [info]    Running sort on Love'sLabourLost.txt
+[2022-05-11 17:02:15.549537] [0x00006730] [info]    Running sort on MeasureForMeasure.txt
+[2022-05-11 17:02:15.561039] [0x00006730] [info]    Running sort on MuchAdoAboutNothing.txt
+[2022-05-11 17:02:15.572542] [0x00006730] [info]    Running sort on PericlesPrinceOfTyre.txt
+[2022-05-11 17:02:15.582043] [0x00006730] [info]    Running sort on TamingOfTheShrew.txt
+[2022-05-11 17:02:15.593546] [0x00006730] [info]    Running sort on TheComedyOfErrors.txt
+[2022-05-11 17:02:15.601547] [0x00006730] [info]    Running sort on TheMerchantOfVenice.txt
+[2022-05-11 17:02:15.613048] [0x00006730] [info]    Running sort on TheMerryWivesOfWindsor.txt
+[2022-05-11 17:02:15.625050] [0x00006730] [info]    Running sort on TheTempest.txt
+[2022-05-11 17:02:15.633552] [0x00006730] [info]    Running sort on TheTwelthNight.txt
+[2022-05-11 17:02:15.644554] [0x00006730] [info]    Running sort on TheTwoGentlemenOfVerona.txt
+[2022-05-11 17:02:15.653556] [0x00006730] [info]    Running sort on TroilusAndCressida .txt
+[2022-05-11 17:02:15.667058] [0x00006730] [info]    Running sort on Winter'sTale.txt
+[2022-05-11 17:02:15.680560] [0x00006730] [info]    Running reduce operation...
+[2022-05-11 17:02:20.073196] [0x00006730] [info]    Writing success file...
+[2022-05-11 17:02:20.073697] [0x00006730] [info]    Removing intermediate files...
+[2022-05-11 17:02:20.080198] [0x00006730] [info]    Map reduce process complete.
 ```
 
 ### File Output
@@ -81,17 +97,16 @@ Assuming the application completed with no errors, the results of the map reduce
 The unit tests are defined in UnitTests\tests.cpp. There are unit tests for the Map, Sort, Reduce, and Workflow calsses. 
 
 ```
-Running main() from c:\a\1\s\thirdparty\googletest\googletest\src\gtest_main.cc
 [==========] Running 12 tests from 4 test cases.
 [----------] Global test environment set-up.
 [----------] 3 tests from mapTest
 [ RUN      ] mapTest.checkOutputPath
-[       OK ] mapTest.checkOutputPath (3 ms)
+[       OK ] mapTest.checkOutputPath (1 ms)
 [ RUN      ] mapTest.checkMapResult
-[       OK ] mapTest.checkMapResult (3 ms)
+[       OK ] mapTest.checkMapResult (1 ms)
 [ RUN      ] mapTest.badOutputDirectory
-[       OK ] mapTest.badOutputDirectory (1 ms)
-[----------] 3 tests from mapTest (7 ms total)
+[       OK ] mapTest.badOutputDirectory (0 ms)
+[----------] 3 tests from mapTest (3 ms total)
 
 [----------] 3 tests from sortTest
 [ RUN      ] sortTest.checkSortOutput
@@ -99,8 +114,8 @@ Running main() from c:\a\1\s\thirdparty\googletest\googletest\src\gtest_main.cc
 [ RUN      ] sortTest.badInputFilePath
 [       OK ] sortTest.badInputFilePath (0 ms)
 [ RUN      ] sortTest.badInputFileFormat
-[       OK ] sortTest.badInputFileFormat (3 ms)
-[----------] 3 tests from sortTest (5 ms total)
+[       OK ] sortTest.badInputFileFormat (1 ms)
+[----------] 3 tests from sortTest (2 ms total)
 
 [----------] 4 tests from reduceTest
 [ RUN      ] reduceTest.checkOutputDirectory
@@ -108,38 +123,41 @@ Running main() from c:\a\1\s\thirdparty\googletest\googletest\src\gtest_main.cc
 [ RUN      ] reduceTest.checkOutputPath
 [       OK ] reduceTest.checkOutputPath (1 ms)
 [ RUN      ] reduceTest.checkBadDirectory
-[       OK ] reduceTest.checkBadDirectory (1 ms)
+[       OK ] reduceTest.checkBadDirectory (0 ms)
 [ RUN      ] reduceTest.checkReduceOutput
-[       OK ] reduceTest.checkReduceOutput (5 ms)
-[----------] 4 tests from reduceTest (9 ms total)
+[       OK ] reduceTest.checkReduceOutput (4 ms)
+[----------] 4 tests from reduceTest (6 ms total)
 
 [----------] 2 tests from WorkflowTest
 [ RUN      ] WorkflowTest.testConstructor
-[2022-04-30 09:19:34.662754] [0x000077c4] [debug]   Debug in Workflow constructor: Entering constructor.
-[2022-04-30 09:19:34.662754] [0x000077c4] [info]    targetDir member has been set in Workflow constructor.
-[2022-04-30 09:19:34.662754] [0x000077c4] [info]    Info in Workflow constructor: intermediateDir member has been set in Workflow constructor.
-[2022-04-30 09:19:34.663254] [0x000077c4] [info]    Info in Workflow constructor: Directory for intermediate files created.
-[2022-04-30 09:19:34.663755] [0x000077c4] [info]    Info in Workflow constructor: outDir member has been set in Workflow constructor.
-[2022-04-30 09:19:34.663755] [0x000077c4] [info]    Info in Workflow constructor: Directory for output files created.
-[2022-04-30 09:19:34.664255] [0x000077c4] [debug]   Debug in Workflow constructor: Construction is complete. Exiting constructor.
-[       OK ] WorkflowTest.testConstructor (2 ms)
+[2022-05-11 17:04:29.398128] [0x00002ef8] [debug]   Debug in Workflow constructor: Entering constructor.
+[2022-05-11 17:04:29.398628] [0x00002ef8] [info]    targetDir member has been set in Workflow constructor.
+[2022-05-11 17:04:29.399129] [0x00002ef8] [info]    Info in Workflow constructor: intermediateDir member has been set in Workflow constructor.
+[2022-05-11 17:04:29.401131] [0x00002ef8] [info]    Info in Workflow constructor: Directory for intermediate files created.
+[2022-05-11 17:04:29.401629] [0x00002ef8] [info]    Info in Workflow constructor: outDir member has been set in Workflow constructor.
+[2022-05-11 17:04:29.402129] [0x00002ef8] [info]    Info in Workflow constructor: Directory for output files created.
+[2022-05-11 17:04:29.405130] [0x00002ef8] [info]    Info in Workflow constructor: Map DLL located.
+[2022-05-11 17:04:29.407630] [0x00002ef8] [info]    Info in Workflow constructor: Reduce DLL located.
+[       OK ] WorkflowTest.testConstructor (10 ms)
 [ RUN      ] WorkflowTest.testRun
-[2022-04-30 09:19:34.667756] [0x000077c4] [debug]   Debug in Workflow constructor: Entering constructor.
-[2022-04-30 09:19:34.668254] [0x000077c4] [info]    targetDir member has been set in Workflow constructor.
-[2022-04-30 09:19:34.668754] [0x000077c4] [info]    Info in Workflow constructor: intermediateDir member has been set in Workflow constructor.
-[2022-04-30 09:19:34.668754] [0x000077c4] [info]    Info in Workflow constructor: Directory for intermediate files created.
-[2022-04-30 09:19:34.669254] [0x000077c4] [info]    Info in Workflow constructor: outDir member has been set in Workflow constructor.
-[2022-04-30 09:19:34.669254] [0x000077c4] [info]    Info in Workflow constructor: Directory for output files created.
-[2022-04-30 09:19:34.669756] [0x000077c4] [debug]   Debug in Workflow constructor: Construction is complete. Exiting constructor.
-[2022-04-30 09:19:35.551908] [0x000077c4] [info]    Info in Workflow run(): Map process completed for All'sWellThatEndsWell.txt
-[2022-04-30 09:19:35.553408] [0x000077c4] [info]    Running sort on All'sWellThatEndsWell.txt
-[2022-04-30 09:19:36.174517] [0x000077c4] [info]    Running reduce operation...
-[2022-04-30 09:19:37.280209] [0x000077c4] [info]    Writing success file...
-[2022-04-30 09:19:37.281709] [0x000077c4] [info]    Removing intermediate files...
-[       OK ] WorkflowTest.testRun (2619 ms)
-[----------] 2 tests from WorkflowTest (2626 ms total)
+[2022-05-11 17:04:29.408631] [0x00002ef8] [debug]   Debug in Workflow constructor: Entering constructor.
+[2022-05-11 17:04:29.409131] [0x00002ef8] [info]    targetDir member has been set in Workflow constructor.
+[2022-05-11 17:04:29.409630] [0x00002ef8] [info]    Info in Workflow constructor: intermediateDir member has been set in Workflow constructor.
+[2022-05-11 17:04:29.410131] [0x00002ef8] [info]    Info in Workflow constructor: Directory for intermediate files created.
+[2022-05-11 17:04:29.410631] [0x00002ef8] [info]    Info in Workflow constructor: outDir member has been set in Workflow constructor.
+[2022-05-11 17:04:29.411130] [0x00002ef8] [info]    Info in Workflow constructor: Directory for output files created.
+[2022-05-11 17:04:29.414131] [0x00002ef8] [info]    Info in Workflow constructor: Map DLL located.
+[2022-05-11 17:04:29.416631] [0x00002ef8] [info]    Info in Workflow constructor: Reduce DLL located.
+[2022-05-11 17:04:29.456138] [0x00002ef8] [info]    Info in Workflow run(): Map process completed for All'sWellThatEndsWell.txt
+[2022-05-11 17:04:29.457138] [0x00002ef8] [info]    Running sort on All'sWellThatEndsWell.txt
+[2022-05-11 17:04:29.469140] [0x00002ef8] [info]    Running reduce operation...
+[2022-05-11 17:04:30.575334] [0x00002ef8] [info]    Writing success file...
+[2022-05-11 17:04:30.576334] [0x00002ef8] [info]    Removing intermediate files...
+[2022-05-11 17:04:30.577333] [0x00002ef8] [info]    Map reduce process complete.
+[       OK ] WorkflowTest.testRun (1171 ms)
+[----------] 2 tests from WorkflowTest (1181 ms total)
 
 [----------] Global test environment tear-down
-[==========] 12 tests from 4 test cases ran. (2650 ms total)
+[==========] 12 tests from 4 test cases ran. (1195 ms total)
 [  PASSED  ] 12 tests.
 ```

@@ -1,11 +1,12 @@
-// Map class definition
+// maplibrary.h
+// Lyndsay LaBarge, Todd Hricik
+// CSE687 Object Oriented Design
+// May 12, 2022
+// 
+// Map class and library definition.
 #pragma once
-
 #include "framework.h"
 
-/*	Decorate with dllexport or dllimport depending
-	on whether MAPLIBRARY_EXPORTS is defined
-*/
 #ifdef MAPLIBRARY_EXPORTS
 #define MAPLIBRARY_API __declspec(dllexport)
 #else
@@ -24,7 +25,7 @@ class Map : public IMap<std::string, std::string>
 {
 
 public:
-
+	// Creates a new map object that will write results to the given directory
 	Map(const boost::filesystem::path& directory);
 
 	// Given data from a file, writes to a separate temporary file that 
@@ -36,5 +37,6 @@ public:
 
 };
 
+// Map Library factory - exposes functions to create and destory Map objects
 extern "C" MAPLIBRARY_API Map * createMapper(const boost::filesystem::path & directory);
 extern "C" MAPLIBRARY_API void destoryMapper(const Map * mapper);

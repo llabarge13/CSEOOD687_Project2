@@ -1,10 +1,14 @@
 // workflow.cpp
 // Todd Hricik
 // CSE687 Object Oriented Design
-// Project 1
-// April 28, 2022
+// 
+// April 28, 2022 - Project 1
 // 
 // Workflow class implementation
+//
+// May 12, 2022 - Project 2
+//	Updated for project 2 to load map and reduce functions
+//	from DLLs
 #include <string>
 #include <iostream>
 #include <boost\filesystem.hpp>
@@ -14,7 +18,11 @@
 #include "windows.h"
 
 // Constructor that creates boost::filesystem::path objects for the input directory, intermediate files directory and the output directory
-Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::string output_dir_arg, std::string map_dll_path, std::string reduce_dll_path)
+Workflow::Workflow(std::string input_dir_arg, 
+		std::string inter_dir_arg, 
+		std::string output_dir_arg, 
+		std::string map_dll_path, 
+		std::string reduce_dll_path)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Debug in Workflow constructor: Entering constructor.";
 
@@ -121,10 +129,10 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 		const wchar_t* widecstr = widestr.c_str();
 
 		// Create a handle to map DLL
-		hDLL_map = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to map DLL
-		if (hDLL_map != NULL) {
+		hDLL_map_ = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to map DLL
+		if (hDLL_map_ != NULL) {
 			BOOST_LOG_TRIVIAL(info) << "Info in Workflow constructor: Map DLL located.";
-			create_map_ = (buildMapper)GetProcAddress(hDLL_map, "createMapper");
+			create_map_ = (buildMapper)GetProcAddress(hDLL_map_, "createMapper");
 
 			// If function pointer to createMap fails to be created, log and exit
 			if (create_map_ == NULL)
@@ -132,6 +140,7 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 				BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Function pointer to createMap is NULL.";
 				exit(-1);
 			}
+			this->map_lib_path_ = boost::filesystem::path{ map_dll_path };
 		}
 
 		// Else log that handle of Map DLL failed to be created and exit
@@ -155,10 +164,10 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 		std::wstring widestr = std::wstring(reduce_dll_path.begin(), reduce_dll_path.end());
 		const wchar_t* widecstr = widestr.c_str();
 
-		hDLL_reduce = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to Reduce DLL
-		if (hDLL_reduce != NULL) {
+		hDLL_reduce_ = LoadLibraryEx(widecstr, NULL, NULL);   // Handle to Reduce DLL
+		if (hDLL_reduce_ != NULL) {
 			BOOST_LOG_TRIVIAL(info) << "Info in Workflow constructor: Reduce DLL located.";
-			create_reduce_ = (buildReducer)GetProcAddress(hDLL_reduce, "createReducer");
+			create_reduce_ = (buildReducer)GetProcAddress(hDLL_reduce_, "createReducer");
 
 			// If create_reduce_ function pointer is NULL, then log and exit
 			if (create_reduce_ == NULL)
@@ -166,6 +175,7 @@ Workflow::Workflow(std::string input_dir_arg, std::string inter_dir_arg, std::st
 				BOOST_LOG_TRIVIAL(fatal) << "Fatal in Workflow constructor: Function pointer to create_reduce_ is NULL.";
 				exit(-1);
 			}
+			this->reduce_lib_path_ = boost::filesystem::path{ reduce_dll_path };
 		}
 		// Else log failure to get Reduce DLL handle and exit
 		else
@@ -190,8 +200,8 @@ Workflow::~Workflow()
 	delete sorter_;
 	delete reduce_;
 
-	FreeLibrary(hDLL_map);
-	FreeLibrary(hDLL_reduce);
+	FreeLibrary(hDLL_map_);
+	FreeLibrary(hDLL_reduce_);
 }
 // Getter for target_dir_ data member
 boost::filesystem::path Workflow::getTargetDir()
@@ -211,6 +221,18 @@ boost::filesystem::path Workflow::getOutDir()
 {
 	// This function returns the boost::filesystem::path object private data member outDir
 	return this->out_dir_;
+}
+
+// Getter for map dll path
+boost::filesystem::path Workflow::getMapLibPath()
+{
+	return this->map_lib_path_;
+}
+
+// Getter for reduce dll path
+boost::filesystem::path Workflow::getReduceLibPath()
+{
+	return this->reduce_lib_path_;
 }
 
 // Run a workflow consisting of map, sort and reduce on all files in target directory

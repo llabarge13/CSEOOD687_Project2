@@ -1,10 +1,14 @@
 // test.cpp
 // Todd Hricik, Lyndsay LaBarge
 // CSE687 Object Oriented Design
-// Project 1
-// April 28, 2022
+// 
+// April 28, 2022 - Project 1
 // 
 // Google unit tests
+//
+// May 12, 2022
+//  Updated tests for workflow to include loading
+//  Map and Reduce DLLs
 #include "pch.h"
 #include <string>
 #include <array>
@@ -262,6 +266,12 @@ TEST(WorkflowTest, testConstructor)
     std::string correct_out_dir = ".\\output";
     boost::filesystem::path out_path = workflow.getOutDir();
     ASSERT_EQ(out_path.string(), correct_out_dir);
+
+    boost::filesystem::path map_path = workflow.getMapLibPath();
+    ASSERT_EQ(map_path.string(), map_dll);
+
+    boost::filesystem::path reduce_path = workflow.getReduceLibPath();
+    ASSERT_EQ(reduce_path.string(), reduce_dll);
 }
 
 TEST(WorkflowTest, testRun)

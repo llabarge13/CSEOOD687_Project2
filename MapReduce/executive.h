@@ -1,18 +1,19 @@
 // executive.h
 // Todd Hricik
 // CSE687 Object Oriented Design
-// Project 1
-// April 28, 2022
+// April 28, 2022 - Project 1
 // 
-// Executive class definition
+//  Executive class definition
+//
+// May 12, 2022 - Updated for Project 2
+//	Now includes paths for reduce and map DLLs
 #include <string>
 #include "workflow.h"
 #pragma once
 
-/*	Executive takes command line arguments into constructor
-	and instantiates a Workflow object that will run the 
-	map reduce application.
-*/
+// Executive takes command line arguments into constructor
+// and instantiates a Workflow object that will run the 
+// map reduce application.
 class Executive
 {
 	public:

@@ -1,22 +1,36 @@
+// imap.h
+// Lyndsay LaBarge, Todd Hricik
+// CSE687 Object Oriented Design
+// May 12, 2022
+// 
+// Template class IMap is a base clase that serves as an interface
+// for the map library.
+// 
+// Abstract class.
 #include <array>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #pragma once
 
-/*	Template class IMap is a base clase that serves as an interface
-	for the map library.
-*/
-
 template <typename KEYT, typename VALUET>
 class IMap {
 
 public:
+	// Create a new IMap that will write map results to 
+	// given directory
 	IMap(const boost::filesystem::path& directory);
+
+	// IMap concrete class object must be deleted or go out of scope
+	// and be destroyed on the stack, otherwise the output
+	// file will not be able to be read until the
+	// object relinquishes it .
 	~IMap();
 
-	// Key = file name, value = Line of text from file. Returns 0 on success.
+	// Key = file name, value = Line of text from file. Returns 0 on success. 
+	// Returns -1 on failure.
+	//
+	// Abstract class method, must be defined.
 	virtual int map(const KEYT& key, const VALUET& value) = 0;
-
 
 	// Gets the path of the most recently written to output file  
 	boost::filesystem::path getOutputPath();
@@ -34,6 +48,7 @@ protected:
 	// Exports word, value pair to disk
 	// If the export fails, returns -1. 
 	// If the export succeeds, returns 0.
+	// Default implmentation. Can be overriden.
 	virtual int exportToDisk(const std::string& filename,
 		const KEYT& key,
 		int value);
@@ -49,7 +64,10 @@ inline IMap<KEYT, VALUET>::IMap(const boost::filesystem::path& directory)
 		output_buffer_.size());
 }
 
-// Destructor
+// IMap concrete class object must be deleted or go out of scope
+// and be destroyed on the stack, otherwise the output
+// file will not be able to be read until the
+// object relinquishes it .
 template<typename KEYT, typename VALUET>
 inline IMap<KEYT, VALUET>::~IMap()
 {
@@ -74,7 +92,7 @@ inline boost::filesystem::path IMap<KEYT, VALUET>::getOutputDirectory()
 	return output_directory_;
 }
 
-//	Export to disk takes string filename, keyand value as input.
+//	Export to key, value pair to disk in the given filename.
 template<typename KEYT, typename VALUET>
 inline int IMap<KEYT, VALUET>::exportToDisk(const std::string& filename, const KEYT& key, int value)
 {
