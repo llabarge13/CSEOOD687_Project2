@@ -8,8 +8,11 @@
 // 
 // Abstract class.
 #include <array>
+#include <regex>
+#include <mutex>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost\log\trivial.hpp>
 #pragma once
 
 template <typename KEYT, typename VALUET>
@@ -43,6 +46,9 @@ private:
 	boost::filesystem::path output_path_;
 	boost::filesystem::ofstream* output_stream_;
 	std::array<char, 2048> output_buffer_;
+
+	// Mutex(s)
+	std::mutex mutex_output_stream_;
 
 protected:
 	// Exports word, value pair to disk
@@ -96,31 +102,49 @@ inline boost::filesystem::path IMap<KEYT, VALUET>::getOutputDirectory()
 template<typename KEYT, typename VALUET>
 inline int IMap<KEYT, VALUET>::exportToDisk(const std::string& filename, const KEYT& key, int value)
 {
-	boost::filesystem::path filePath = boost::filesystem::path{
-		output_directory_.string() + "\\" + filename
-	};
-
-	// Started to process a new file
-	if (output_path_.compare(filePath) != 0) {
-		// Flush & close the old file stream and start a new one
-		if (output_stream_->is_open()) {
-			output_stream_->close();
-		}
-		output_path_ = filePath;
-		output_stream_->open(output_path_);
+	/*	Figure out which temporary partition file in temporary
+		directory should receive the key, value pair
+	*/
+	/* Set the output file to temp_partion1.txt file in output directory
+		if the first letter of the key is and element of the alphabet [a,k] inclusive, 
+	*/
+	boost::filesystem::path filePath;
+	if (std::regex_match(key, std::regex("^[abcdefghik]")))
+	{
+		filePath = boost::filesystem::path{ output_directory_.string() + "\\temp_partition1.txt" };
 	}
+	// else set the output file to temp_partition2.txt file in output directory
+	else
+	{
+		filePath = boost::filesystem::path{ output_directory_.string() + "\\temp_partition2.txt" };
+	}
+
+	// Acquire a lock for the output_stream_ data member
+	mutex_output_stream_.lock();
+	
+	// Open the temp file in intermediate directory corresponding to filePath
+	output_stream_->open(filePath, std::ios_base::app);
 
 	// There is a problem with the output file
 	if (output_stream_->fail()) {
+		BOOST_LOG_TRIVIAL(fatal) << "Fatal error in IMAP::exportToDisk";
+		// Release the lock for the output_stream_ data member
+//		mutex_output_stream_.unlock();
 		return -1;
 	}
 	else {
+		// Acquire a lock on the output_sream_ data member
+		
 		// Write to the file stream 
 		*(output_stream_) << "(";
 		*(output_stream_) << key;
 		*(output_stream_) << ", ";
 		*(output_stream_) << value;
 		*(output_stream_) << ")\n";
+		// Release the lock for the output_stream_ data member
+		mutex_output_stream_.unlock();
 		return 0;
 	}
+
+
 }

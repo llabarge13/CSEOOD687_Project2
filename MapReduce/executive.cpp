@@ -8,6 +8,7 @@
 // May 12, 2022 - Updated for Project 2
 //	Includes map and reduce DLL paths
 #include <string>
+#include <thread>
 #include "executive.h"
 #include "workflow.h"
 
@@ -37,5 +38,18 @@ Executive::~Executive()
 // Calls on workflow object to run its map/sort/reduce application
 void Executive::run()
 {
-	workflow_->run();
+	// Spin up two threads for two mappers
+	std::thread mapper1(&Workflow::runMapper, workflow_);
+	std::thread mapper2(&Workflow::runMapper, workflow_);
+
+	// Join all mapper threads
+	/* Do these need to be static??? */
+	mapper1.join();
+	mapper2.join();
+
+
+	// Put all mapper threads in detach mode
+	if (mapper1.joinable()) { mapper1.detach(); }
+	if (mapper2.joinable()) { mapper2.detach(); }
+
 }
